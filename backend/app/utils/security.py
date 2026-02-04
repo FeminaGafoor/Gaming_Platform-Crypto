@@ -12,9 +12,13 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from ..config import settings
 
-# Password hashing context
+# Password hashing context with explicit bcrypt backend
 # bcrypt is the industry standard for password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__rounds=12  # Explicitly set bcrypt rounds
+)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -32,6 +36,10 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         True if password matches, False otherwise
     """
+    # Truncate password to 72 bytes if needed (bcrypt limitation)
+    if len(plain_password.encode('utf-8')) > 72:
+        plain_password = plain_password[:72]
+    
     return pwd_context.verify(plain_password, hashed_password)
 
 
@@ -49,6 +57,10 @@ def get_password_hash(password: str) -> str:
     Returns:
         Hashed password string
     """
+    # Truncate password to 72 bytes if needed (bcrypt limitation)
+    if len(password.encode('utf-8')) > 72:
+        password = password[:72]
+    
     return pwd_context.hash(password)
 
 
