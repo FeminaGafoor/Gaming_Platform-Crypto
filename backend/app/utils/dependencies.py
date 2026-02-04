@@ -8,7 +8,8 @@ Think of these as security checkpoints:
 """
 
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthCredentials
+from fastapi.security import HTTPBearer
+from fastapi.security.http import HTTPAuthorizationCredentials as HTTPAuthCredentials
 from sqlalchemy.orm import Session
 from typing import Optional
 
