@@ -9,9 +9,9 @@ class UserRole(enum.Enum):
     User roles in the system.
     Think of this as job titles in a company.
     """
-    AGENT = "agent"
-    AFFILIATE = "affiliate"
-    ADMIN = "admin"
+    AGENT = "AGENT"
+    AFFILIATE = "AFFILIATE"
+    ADMIN = "ADMIN"
 
 class User(Base):
     """
