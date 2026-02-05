@@ -1,9 +1,5 @@
 """
 Authentication routes - login and registration.
-
-Think of this as the reception desk:
-- New users sign up here
-- Existing users log in here
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -14,10 +10,11 @@ from ..database import get_db
 from ..services.auth_service import AuthService
 from ..models.user import UserRole
 
-router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+# Remove the prefix here - it's added in main.py
+router = APIRouter()
 
 
-# Request/Response Models (Pydantic schemas)
+# Request/Response Models
 class RegisterRequest(BaseModel):
     """Registration request body"""
     email: EmailStr
@@ -48,97 +45,54 @@ class LoginRequest(BaseModel):
         }
 
 
-class AuthResponse(BaseModel):
-    """Authentication response"""
+class TokenResponse(BaseModel):
+    """Token response with user info"""
     access_token: str
-    token_type: str
+    token_type: str = "bearer"
     user: dict
-    
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                "token_type": "bearer",
-                "user": {
-                    "id": 1,
-                    "email": "agent@example.com",
-                    "role": "agent"
-                }
-            }
-        }
 
 
-@router.post("/register", response_model=AuthResponse, status_code=status.HTTP_201_CREATED)
-def register(
-    request: RegisterRequest,
-    db: Session = Depends(get_db)
-):
+# Routes
+@router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+async def register(request: RegisterRequest, db: Session = Depends(get_db)):
     """
     Register a new user (agent or affiliate).
     
     Story: Someone fills out the signup form
     We validate their info, create their account, and log them in
-    
-    - **email**: Must be unique and valid
-    - **password**: Will be hashed before storing
-    - **role**: Either "agent" or "affiliate"
-    
-    Returns access token for immediate login.
     """
-    # Convert role string to enum
     try:
-        role_enum = UserRole.AGENT if request.role.lower() == "agent" else UserRole.AFFILIATE
-    except:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Role must be either 'agent' or 'affiliate'"
+        auth_service = AuthService(db)
+        result = auth_service.register(
+            email=request.email,
+            password=request.password,
+            role=request.role
         )
-    
-    # Register user
-    result = AuthService.register_user(
-        email=request.email,
-        password=request.password,
-        role=role_enum,
-        db=db
-    )
-    
-    return result
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/login", response_model=AuthResponse)
-def login(
-    request: LoginRequest,
-    db: Session = Depends(get_db)
-):
+@router.post("/login", response_model=TokenResponse)
+async def login(request: LoginRequest, db: Session = Depends(get_db)):
     """
-    Login with email and password.
+    Login and get access token.
     
     Story: User enters their credentials
     We verify them and give them a session token
-    
-    - **email**: User's registered email
-    - **password**: User's password
-    
-    Returns access token for authenticated requests.
     """
-    result = AuthService.login(
-        email=request.email,
-        password=request.password,
-        db=db
-    )
-    
-    return result
+    try:
+        auth_service = AuthService(db)
+        result = auth_service.login(
+            email=request.email,
+            password=request.password
+        )
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=401, detail=str(e))
 
 
 @router.get("/test")
-def test_endpoint():
-    """
-    Test endpoint to verify API is running.
-    
-    Story: Quick health check - is the server alive?
-    """
-    return {
-        "message": "Gaming Platform API is running!",
-        "version": "1.0.0",
-        "status": "healthy"
-    }
+async def test():
+    """Test endpoint to verify auth routes are working"""
+    return {"message": "Auth routes are working!"}

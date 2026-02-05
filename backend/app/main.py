@@ -1,137 +1,55 @@
-"""
-Main FastAPI application.
-
-Think of this as the restaurant manager:
-- Opens the doors (starts the server)
-- Sets up the dining room (CORS, middleware)
-- Organizes service counters (routes)
-- Manages the kitchen (database)
-"""
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+from app.database import engine, Base
+from app.routes import auth, agent, affiliate
+from app.config import get_settings
 
-from .database import engine, Base
-from .config import settings
-from .routes import auth_router, agent_router, affiliate_router
-
+settings = get_settings()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Application lifespan manager.
-    
-    Story: What happens when restaurant opens and closes?
-    - Startup: Create database tables if they don't exist
-    - Shutdown: Clean up resources
-    
-    This runs once at startup and once at shutdown.
-    """
-    # Startup: Create all database tables
     print("🚀 Starting Gaming Platform API...")
     print("📊 Creating database tables...")
     Base.metadata.create_all(bind=engine)
     print("✅ Database tables created successfully!")
-    
-    yield  # Application runs here
-    
-    # Shutdown: Cleanup (if needed)
-    print("👋 Shutting down Gaming Platform API...")
+    yield
+    print("👋 Shutting down...")
 
-
-# Create FastAPI application
 app = FastAPI(
-    title=settings.PROJECT_NAME,
-    version=settings.VERSION,
-    description="""
-    Gaming Platform API - Agent and Affiliate Management System
-    
-    ## Features
-    
-    ### Agent Panel
-    * Manage players (register, view, block/unblock)
-    * Track commissions and earnings
-    * Request withdrawals
-    * View dashboard statistics
-    
-    ### Affiliate Panel
-    * Generate unique referral links
-    * Track clicks and conversions
-    * Monitor earnings (CPA model)
-    * Request payouts
-    * Access marketing materials
-    
-    ## Authentication
-    
-    All protected endpoints require a Bearer token in the Authorization header:
-```
-    Authorization: Bearer <your_access_token>
-```
-    
-    Get your token by registering or logging in through `/api/auth` endpoints.
-    """,
-    lifespan=lifespan,
-    docs_url="/docs",  # Swagger UI
-    redoc_url="/redoc",  # ReDoc UI
+    title="Gaming Platform API",
+    description="Agent and Affiliate Management System",
+    version="1.0.0",
+    lifespan=lifespan
 )
 
-
-# Configure CORS (Cross-Origin Resource Sharing)
-# This allows frontend (React/Next.js) to communicate with backend
+# CORS Configuration - UPDATED TO ALLOW FRONTEND
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        settings.FRONTEND_URL,  # Your frontend URL
-        "http://localhost:3000",  # Local development
-        "http://localhost:3001",  # Alternative local port
+        "http://localhost:5173",  # Vite dev server
+        "http://localhost:3000",  # Alternative port
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:3000",
     ],
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+    allow_methods=["*"],  # Allow all methods (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"],  # Allow all headers
 )
 
+# Include routers
+app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(agent.router, prefix="/api/agent", tags=["Agent"])
+app.include_router(affiliate.router, prefix="/api/affiliate", tags=["Affiliate"])
 
-# Include routers (API endpoints)
-app.include_router(auth_router)
-app.include_router(agent_router)
-app.include_router(affiliate_router)
-
-
-# Root endpoint
 @app.get("/")
-def read_root():
-    """
-    Root endpoint - API health check.
-    
-    Story: Someone visits the base URL
-    We welcome them and show basic info
-    """
+async def root():
     return {
-        "message": "Welcome to Gaming Platform API",
-        "version": settings.VERSION,
-        "status": "running",
-        "docs": "/docs",
-        "redoc": "/redoc",
-        "endpoints": {
-            "auth": "/api/auth",
-            "agent": "/api/agent",
-            "affiliate": "/api/affiliate"
-        }
+        "message": "Gaming Platform API",
+        "version": "1.0.0",
+        "docs": "/docs"
     }
 
-
-# Health check endpoint (for monitoring tools)
 @app.get("/health")
-def health_check():
-    """
-    Health check endpoint.
-    
-    Used by monitoring tools (Docker, Kubernetes, load balancers)
-    to check if the service is alive.
-    """
-    return {
-        "status": "healthy",
-        "service": "gaming-platform-api",
-        "version": settings.VERSION
-    }
+async def health_check():
+    return {"status": "healthy"}
