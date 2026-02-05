@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Moon, Sun } from 'lucide-react';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -9,9 +10,27 @@ const Login = () => {
   const [role, setRole] = useState('agent');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    if (saved !== null) return saved === 'true';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
   const { login, register } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('darkMode', isDarkMode.toString());
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,9 +44,10 @@ const Login = () => {
 
       if (result.success) {
         // Redirect based on role
-        const redirectPath = result.user.role === 'agent' 
-          ? '/agent/dashboard' 
-          : '/affiliate/dashboard';
+        const redirectPath =
+          result.user.role === 'admin' ? '/admin/withdrawals' :
+          result.user.role === 'agent' ? '/agent/dashboard' :
+          '/affiliate/dashboard';
         navigate(redirectPath);
       } else {
         setError(result.error);
@@ -44,6 +64,19 @@ const Login = () => {
       {/* Animated background blobs */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/20 dark:bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/20 dark:bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+
+      {/* Dark Mode Toggle - Top Right */}
+      <button
+        onClick={toggleDarkMode}
+        className="fixed top-6 right-6 p-3 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 border border-gray-200 dark:border-gray-700 shadow-lg z-50"
+        title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+      >
+        {isDarkMode ? (
+          <Sun className="w-6 h-6 text-yellow-500" />
+        ) : (
+          <Moon className="w-6 h-6 text-gray-700" />
+        )}
+      </button>
 
       <div className="max-w-md w-full relative z-10">
         <div className="text-center mb-8 animate-float">
@@ -116,7 +149,7 @@ const Login = () => {
                 setIsLogin(!isLogin);
                 setError('');
               }}
-              className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+              className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
             >
               {isLogin
                 ? "Don't have an account? Register"
@@ -126,8 +159,8 @@ const Login = () => {
 
           {/* Quick test accounts */}
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-2">Quick test accounts:</p>
-            <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-2 font-medium">Quick test accounts:</p>
+            <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1 text-center">
               <p>Agent: agent@test.com / password123</p>
               <p>Affiliate: affiliate@test.com / password123</p>
             </div>
