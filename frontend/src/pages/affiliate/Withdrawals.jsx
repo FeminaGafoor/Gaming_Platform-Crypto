@@ -48,12 +48,12 @@ const AffiliateWithdrawals = () => {
 
   const getStatusColor = (status) => {
     const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      approved: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
-      processed: 'bg-blue-100 text-blue-800',
+      pending: 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg shadow-yellow-500/30',
+      approved: 'bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-lg shadow-green-500/30',
+      rejected: 'bg-gradient-to-r from-red-400 to-pink-500 text-white shadow-lg shadow-red-500/30',
+      processed: 'bg-gradient-to-r from-blue-400 to-cyan-500 text-white shadow-lg shadow-blue-500/30',
     };
-    return colors[status?.toLowerCase()] || 'bg-gray-100 text-gray-800';
+    return colors[status?.toLowerCase()] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200';
   };
 
   const columns = [
@@ -86,64 +86,69 @@ const AffiliateWithdrawals = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Withdrawals</h1>
-          <p className="text-gray-600 mt-1">Manage your payout requests</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+            Withdrawals
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2 text-lg">Manage your payout requests</p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="btn-primary"
+          className="btn-primary flex items-center space-x-2"
         >
-          {showForm ? 'Cancel' : 'Request Withdrawal'}
+          <DollarSign className="w-5 h-5" />
+          <span>{showForm ? 'Cancel' : 'Request Withdrawal'}</span>
         </button>
       </div>
 
       {/* Alerts */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg flex items-center space-x-2">
-          <AlertCircle className="w-5 h-5" />
-          <span>{error}</span>
+        <div className="bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-6 py-4 rounded-2xl flex items-center space-x-3 shadow-lg animate-pulse">
+          <AlertCircle className="w-6 h-6" />
+          <span className="font-medium">{error}</span>
         </div>
       )}
       {success && (
-        <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg">
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border-2 border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 px-6 py-4 rounded-2xl shadow-lg font-medium">
           {success}
         </div>
       )}
 
       {/* Withdrawal Form */}
       {showForm && (
-        <div className="card">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">New Withdrawal Request</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="card shadow-2xl">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-6">
+            New Withdrawal Request
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="label">Amount (USD)</label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 <input
                   type="number"
                   step="0.01"
                   min="100"
                   value={formData.amount}
                   onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                  className="input pl-10"
+                  className="input pl-12"
                   placeholder="100.00"
                   required
                 />
               </div>
-              <p className="text-sm text-gray-500 mt-1">Minimum withdrawal: $100.00</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Minimum withdrawal: $100.00</p>
             </div>
 
             <div>
               <label className="label">Payment Method</label>
               <div className="relative">
-                <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 <select
                   value={formData.payment_method}
                   onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
-                  className="input pl-10"
+                  className="input pl-12"
                   required
                 >
                   <option value="bank_transfer">Bank Transfer</option>
@@ -159,18 +164,30 @@ const AffiliateWithdrawals = () => {
               <textarea
                 value={formData.payment_details}
                 onChange={(e) => setFormData({ ...formData, payment_details: e.target.value })}
-                className="input h-24 resize-none"
+                className="input h-28 resize-none"
                 placeholder="Enter your bank account details, crypto wallet address, or PayPal email"
                 required
               />
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-blue-900 mb-2">Important Notes:</h3>
-              <ul className="text-sm text-blue-800 space-y-1">
-                <li>• Withdrawals are processed within 2-3 business days</li>
-                <li>• You'll receive an email once your request is approved</li>
-                <li>• Ensure your payment details are accurate to avoid delays</li>
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-800/30 rounded-2xl p-6 shadow-lg">
+              <h3 className="text-sm font-bold text-blue-900 dark:text-blue-400 mb-3 flex items-center space-x-2">
+                <AlertCircle className="w-5 h-5" />
+                <span>Important Notes:</span>
+              </h3>
+              <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-2">
+                <li className="flex items-start space-x-2">
+                  <span className="text-blue-500 mt-0.5">•</span>
+                  <span>Withdrawals are processed within 2-3 business days</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-blue-500 mt-0.5">•</span>
+                  <span>You'll receive an email once your request is approved</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-blue-500 mt-0.5">•</span>
+                  <span>Ensure your payment details are accurate to avoid delays</span>
+                </li>
               </ul>
             </div>
 

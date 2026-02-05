@@ -34,22 +34,22 @@ const Sidebar = () => {
   const links = isAgent ? agentLinks : affiliateLinks;
 
   return (
-    <aside className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen p-4">
+    <aside className="w-64 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl border-r border-gray-200 dark:border-gray-800 min-h-screen p-4">
       <nav className="space-y-2">
         {links.map((link) => (
           <NavLink
             key={link.to}
             to={link.to}
             className={({ isActive }) =>
-              `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
                 isActive
-                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/30'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:scale-105'
               }`
             }
           >
-            <link.icon className="w-5 h-5" />
-            <span className="font-medium">{link.label}</span>
+            <link.icon className={`w-5 h-5 ${!isActive && 'group-hover:scale-110 transition-transform'}`} />
+            <span className="font-semibold">{link.label}</span>
           </NavLink>
         ))}
       </nav>
