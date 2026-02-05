@@ -89,14 +89,27 @@ class AffiliateService:
     
     def request_withdrawal(self, user_id: int, affiliate_id: int, withdrawal_data: dict):
         """Request a withdrawal"""
+        from ..models.withdrawal import Withdrawal
+        
         affiliate = self.db.query(Affiliate).filter(Affiliate.id == affiliate_id).first()
         
-        amount = float(withdrawal_data.get('amount', 0))
-        if amount > affiliate.withdrawable_balance:
-            raise ValueError("Insufficient balance")
+        if not affiliate:
+            raise ValueError("Affiliate not found")
         
+        amount = float(withdrawal_data.get('amount', 0))
+        
+        # ✅ Validate minimum amount
+        if amount < 100:
+            raise ValueError("Minimum withdrawal amount is $100")
+        
+        # ✅ Check balance
+        if amount > affiliate.withdrawable_balance:
+            raise ValueError(f"Insufficient balance. Available: ${affiliate.withdrawable_balance:.2f}")
+        
+        # ✅ Create withdrawal
         withdrawal = Withdrawal(
             user_id=user_id,
+            agent_id=None,
             affiliate_id=affiliate_id,
             amount=amount,
             payment_method=withdrawal_data.get('payment_method'),
@@ -107,6 +120,8 @@ class AffiliateService:
         
         self.db.add(withdrawal)
         self.db.commit()
+        self.db.refresh(withdrawal)
+        
         return withdrawal
     
     def get_marketing_assets(self, affiliate_id: int):

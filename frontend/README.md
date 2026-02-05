@@ -1,16 +1,65 @@
-# React + Vite
+# 🎮 Gaming Platform - Agent & Affiliate Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack iGaming platform for managing agents, affiliates, players, commissions, and payouts.
 
-Currently, two official plugins are available:
+## 🏗️ Architecture
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Frontend:** React 18 + Vite + Tailwind CSS
+- **Backend:** FastAPI (Python 3.12)
+- **Database:** PostgreSQL 14
+- **Authentication:** JWT tokens
+- **Deployment:** Vercel (Frontend) + Railway (Backend)
 
-## React Compiler
+## 🚀 Live Demo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend:** https://gaming-platform.vercel.app
+- **Backend API:** https://gaming-platform-api.railway.app
+- **API Documentation:** https://gaming-platform-api.railway.app/docs
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Agent Panel
+- ✅ Dashboard with KPIs and charts
+- ✅ Player management (add, block, view)
+- ✅ Commission tracking (10% on player losses)
+- ✅ Withdrawal system with approval flow
+- ✅ CSV export for earnings
+
+### Affiliate Panel
+- ✅ Unique referral link generation
+- ✅ Click tracking and analytics
+- ✅ Conversion funnel (clicks → registrations → deposits)
+- ✅ CPA-based earnings ($50 per deposit)
+- ✅ Marketing assets and QR codes
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React 18.2
+- Vite 5.0
+- Tailwind CSS 3.4
+- React Router 6
+- Recharts (for graphs)
+- Lucide React (icons)
+- Axios
+
+### Backend
+- FastAPI 0.104
+- SQLAlchemy 2.0
+- PostgreSQL 14
+- Pydantic v2
+- Python-JOSE (JWT)
+- Bcrypt (password hashing)
+- Alembic (migrations)
+
+## 📦 Installation
+
+### Prerequisites
+- Node.js 18+
+- Python 3.12+
+- PostgreSQL 14+
+
+### Local Development
+
+#### 1. Clone Repository
+```bash

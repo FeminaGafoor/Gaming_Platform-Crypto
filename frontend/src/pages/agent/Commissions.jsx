@@ -1,7 +1,45 @@
+
+
 import { useState, useEffect } from 'react';
 import { agentAPI } from '../../services/api';
 import DataTable from '../../components/DataTable';
 import { Download } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+
+  const exportToCSV = (rows, filename) => {
+  if (!rows || rows.length === 0) {
+    alert('No data to export');
+    return;
+  }
+
+  const headers = ['ID', 'Amount', 'Type', 'Description', 'Date'];
+  const data = rows.map(r => [
+    r.id,
+    r.amount?.toFixed(2),
+    r.commission_type,
+    r.description || '',
+    new Date(r.created_at).toLocaleDateString()
+  ]);
+
+  const csv = [headers, ...data]
+    .map(row =>
+      row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')
+    )
+    .join('\n');
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.setAttribute('download', filename);
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+};
+
 
 const AgentCommissions = () => {
   const [commissions, setCommissions] = useState([]);
@@ -20,29 +58,6 @@ const AgentCommissions = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const exportToCSV = () => {
-    const headers = ['ID', 'Amount', 'Type', 'Description', 'Date'];
-    const rows = commissions.map(c => [
-      c.id,
-      c.amount.toFixed(2),
-      c.commission_type,
-      c.description || '',
-      new Date(c.created_at).toLocaleDateString()
-    ]);
-
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `commissions_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
   };
 
   const columns = [
@@ -67,6 +82,11 @@ const AgentCommissions = () => {
 
   const totalEarnings = commissions.reduce((sum, c) => sum + c.amount, 0);
 
+  const chartData = commissions.map(c => ({
+    date: new Date(c.created_at).toLocaleDateString(),
+    amount: c.amount
+  }));
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -75,9 +95,9 @@ const AgentCommissions = () => {
           <p className="text-gray-600 mt-1">Track all your earnings</p>
         </div>
         <button
-          onClick={exportToCSV}
+          type="button"
+          onClick={() => exportToCSV(commissions, `commissions_${new Date().toISOString().split('T')[0]}.csv`)}
           className="btn-secondary flex items-center space-x-2"
-          disabled={commissions.length === 0}
         >
           <Download className="w-4 h-4" />
           <span>Export CSV</span>
@@ -100,6 +120,26 @@ const AgentCommissions = () => {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Trend Graph */}
+      <div className="card">
+        <h2 className="text-xl font-bold text-gray-900 mb-6">Commission Trend</h2>
+        {chartData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="amount" stroke="#10b981" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="text-center py-12 text-gray-500">
+            No data yet
+          </div>
+        )}
       </div>
 
       {/* Commissions Table */}

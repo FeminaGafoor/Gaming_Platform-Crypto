@@ -1,9 +1,15 @@
+
+
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from app.database import engine, Base
-from app.routes import auth, agent, affiliate
-from app.config import get_settings
+
+from .database import engine, Base
+from .routes import auth, agent, affiliate, admin
+from .config import get_settings
+
+
 
 settings = get_settings()
 
@@ -23,24 +29,23 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS Configuration - UPDATED TO ALLOW FRONTEND
+# ✅ CORS Configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",  # Vite dev server
-        "http://localhost:3000",  # Alternative port
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "https://your-vercel-domain.vercel.app",
     ],
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all methods (GET, POST, PUT, DELETE, etc.)
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(agent.router, prefix="/api/agent", tags=["Agent"])
 app.include_router(affiliate.router, prefix="/api/affiliate", tags=["Affiliate"])
+app.include_router(admin.router, prefix="/api/admin", tags=["Admin"])
 
 @app.get("/")
 async def root():

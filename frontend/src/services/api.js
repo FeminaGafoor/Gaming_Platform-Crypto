@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -41,6 +41,15 @@ export const authAPI = {
   register: (data) => api.post('/api/auth/register', data),
   login: (data) => api.post('/api/auth/login', data),
 };
+
+//Admin APIs
+export const adminAPI = {
+  getWithdrawals: () => api.get('/api/admin/withdrawals'),
+  approveWithdrawal: (id) => api.put(`/api/admin/withdrawals/${id}/approve`),
+  rejectWithdrawal: (id) => api.put(`/api/admin/withdrawals/${id}/reject`),
+};
+
+
 
 // Agent APIs
 export const agentAPI = {

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { affiliateAPI } from '../../services/api';
-import { Copy, Check, ExternalLink, QrCode } from 'lucide-react';
+import { Copy, Check, ExternalLink, QrCode, X } from 'lucide-react';
 
 const AffiliateReferralLinks = () => {
   const [linkData, setLinkData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(null);
+  const [showQRModal, setShowQRModal] = useState(false);
 
   useEffect(() => {
     fetchReferralLink();
@@ -26,6 +27,13 @@ const AffiliateReferralLinks = () => {
     navigator.clipboard.writeText(text);
     setCopied(key);
     setTimeout(() => setCopied(null), 2000);
+  };
+
+  const downloadQR = () => {
+    const link = document.createElement('a');
+    link.href = linkData?.qr_code_url;
+    link.download = `qr-code-${linkData?.referral_code}.png`;
+    link.click();
   };
 
   if (loading) {
@@ -132,14 +140,87 @@ const AffiliateReferralLinks = () => {
           </div>
           <p className="text-sm text-gray-600 mb-3">For offline marketing and print materials</p>
           <button
-            onClick={() => window.open(linkData?.qr_code_url, '_blank')}
+            onClick={() => setShowQRModal(true)}
             className="btn-secondary flex items-center space-x-2"
           >
-            <ExternalLink className="w-4 h-4" />
+            <QrCode className="w-4 h-4" />
             <span>View QR Code</span>
           </button>
         </div>
       </div>
+
+      {/* QR Code Modal */}
+      {showQRModal && (
+       
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+        <div className="bg-white rounded-xl max-w-md w-full p-4 sm:p-6 relative my-4 sm:my-8 max-h-[95vh] overflow-y-auto">
+
+            {/* Close button */}
+            <button
+              onClick={() => setShowQRModal(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+
+            <div className="text-center">
+              <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mx-auto mb-4">
+                <QrCode className="w-8 h-8 text-purple-600" />
+              </div>
+
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Your QR Code</h2>
+              <p className="text-gray-600 mb-6">
+                Scan to visit your referral link
+              </p>
+
+              {/* QR Code Image */}
+              <div className="bg-white p-4 rounded-lg border-2 border-gray-200 mb-4">
+  <img
+    src={linkData?.qr_code_url}
+    alt="QR Code"
+    className="w-full max-w-[200px] sm:max-w-[250px] mx-auto"
+  />
+</div>
+
+              {/* Referral Code */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                <p className="text-sm text-gray-600 mb-1">Referral Code</p>
+                <code className="text-xl font-mono font-bold text-blue-600">
+                  {linkData?.referral_code}
+                </code>
+              </div>
+
+              {/* Actions */}
+              <div className="flex space-x-3">
+                <button
+                  onClick={downloadQR}
+                  className="flex-1 btn-primary flex items-center justify-center space-x-2"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span>Download</span>
+                </button>
+                <button
+                  onClick={() => setShowQRModal(false)}
+                  className="flex-1 btn-secondary"
+                >
+                  Close
+                </button>
+              </div>
+
+              {/* Tips */}
+              <div className="mt-6 text-left bg-blue-50 rounded-lg p-4">
+                <p className="text-sm font-semibold text-blue-900 mb-2">💡 Usage Tips:</p>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Print on business cards</li>
+                  <li>• Add to promotional flyers</li>
+                  <li>• Display at events or storefronts</li>
+                  <li>• Share in presentations</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Usage Instructions */}
       <div className="card">
@@ -187,20 +268,8 @@ const AffiliateReferralLinks = () => {
       <div className="card">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Banner Images</h2>
         <p className="text-sm text-gray-600 mb-4">Download pre-made banners with your tracking code</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {linkData?.banner_images?.map((banner, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
-              <div className="aspect-video bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
-                <img src={banner} alt={`Banner ${index + 1}`} className="max-w-full max-h-full" />
-              </div>
-              <button
-                onClick={() => window.open(banner, '_blank')}
-                className="w-full btn-secondary text-sm"
-              >
-                Download
-              </button>
-            </div>
-          ))}
+        <div className="text-center py-8 text-gray-500">
+          Banners coming soon! Use your QR code for now.
         </div>
       </div>
     </div>

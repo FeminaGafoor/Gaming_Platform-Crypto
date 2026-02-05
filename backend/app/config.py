@@ -2,12 +2,9 @@ from pydantic_settings import BaseSettings
 from functools import lru_cache
 
 class Settings(BaseSettings):
-    """
-    Application settings loaded from environment variables.
-
-    """
+    """Application settings loaded from environment variables"""
     
-    # Database
+    # Database - ✅ Now supports PostgreSQL
     DATABASE_URL: str
     
     # JWT Authentication
@@ -16,7 +13,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     # CORS
-    FRONTEND_URL: str = "http://localhost:3000"
+    FRONTEND_URL: str = "http://localhost:5173"  # ✅ Changed to 5173
     
     # App Settings
     PROJECT_NAME: str = "Gaming Platform API"
@@ -28,10 +25,7 @@ class Settings(BaseSettings):
 
 @lru_cache()
 def get_settings():
-    """
-    This function is cached, so settings are loaded only once.
-    Like reading the operations manual once and remembering it.
-    """
+    """Cached settings instance"""
     return Settings()
 
 settings = get_settings()

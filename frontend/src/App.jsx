@@ -14,6 +14,7 @@ import AffiliateConversions from './pages/affiliate/Conversions';
 import AffiliateCommissions from './pages/affiliate/Commissions';
 import AffiliateWithdrawals from './pages/affiliate/Withdrawals';
 import AffiliateMarketing from './pages/affiliate/Marketing';
+import AdminWithdrawals from './pages/admin/Withdrawals';
 
 // Components
 import Navbar from './components/Navbar';
@@ -77,6 +78,7 @@ function App() {
           <Route path="/affiliate/commissions" element={<ProtectedRoute requiredRole="affiliate"><DashboardLayout><AffiliateCommissions /></DashboardLayout></ProtectedRoute>} />
           <Route path="/affiliate/withdrawals" element={<ProtectedRoute requiredRole="affiliate"><DashboardLayout><AffiliateWithdrawals /></DashboardLayout></ProtectedRoute>} />
           <Route path="/affiliate/marketing" element={<ProtectedRoute requiredRole="affiliate"><DashboardLayout><AffiliateMarketing /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/admin/withdrawals" element={<AdminWithdrawals />} />
           
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="*" element={<Navigate to="/login" replace />} />

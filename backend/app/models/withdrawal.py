@@ -1,22 +1,11 @@
-from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime, Enum
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
-import enum
 from ..database import Base
-
-class WithdrawalStatus(enum.Enum):
-    """Withdrawal request status"""
-    PENDING = "pending"
-    APPROVED = "approved"
-    REJECTED = "rejected"
-    PROCESSED = "processed"
 
 class Withdrawal(Base):
     """
     Withdrawal requests from agents/affiliates.
-    
-    Think of this as salary/payment requests.
-    User requests → Admin approves → Money sent
     """
     __tablename__ = "withdrawals"
     
@@ -25,11 +14,15 @@ class Withdrawal(Base):
     # Who's requesting withdrawal?
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     
+    # ✅ ADDED: Track source (agent or affiliate)
+    agent_id = Column(Integer, ForeignKey("agents.id"), nullable=True)
+    affiliate_id = Column(Integer, ForeignKey("affiliates.id"), nullable=True)
+    
     # Amount and status
     amount = Column(Float, nullable=False)
-    status = Column(Enum(WithdrawalStatus), default=WithdrawalStatus.PENDING)
+    status = Column(String, default="PENDING")  # ✅ Using String instead of Enum
     
-    # Payment details (could be bank account, crypto wallet, etc.)
+    # Payment details
     payment_method = Column(String, nullable=True)
     payment_details = Column(String, nullable=True)
     
