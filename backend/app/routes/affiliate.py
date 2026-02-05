@@ -5,9 +5,7 @@ from typing import List
 from ..database import get_db
 from ..utils.dependencies import get_current_affiliate
 from ..services.affiliate_service import AffiliateService
-from ..schemas.affiliate import *
 
-# Remove prefix - it's added in main.py
 router = APIRouter()
 
 @router.get("/dashboard")
@@ -68,6 +66,7 @@ async def get_withdrawals(
 ):
     """Get withdrawal history"""
     service = AffiliateService(db)
+    # Use affiliate.user_id
     return service.get_withdrawals(affiliate.user_id)
 
 @router.post("/withdrawals")
@@ -78,6 +77,7 @@ async def request_withdrawal(
 ):
     """Request a withdrawal"""
     service = AffiliateService(db)
+    # Use affiliate.user_id and affiliate.id
     return service.request_withdrawal(affiliate.user_id, affiliate.id, withdrawal_data)
 
 @router.get("/marketing-assets")

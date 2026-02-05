@@ -5,9 +5,7 @@ from typing import List
 from ..database import get_db
 from ..utils.dependencies import get_current_agent
 from ..services.agent_service import AgentService
-from ..schemas.agent import *
 
-# Remove prefix - it's added in main.py
 router = APIRouter()
 
 @router.get("/dashboard")
@@ -68,6 +66,7 @@ async def get_withdrawals(
 ):
     """Get withdrawal history"""
     service = AgentService(db)
+    # Use agent.user_id instead of just user_id
     return service.get_withdrawals(agent.user_id)
 
 @router.post("/withdrawals")
@@ -78,4 +77,5 @@ async def request_withdrawal(
 ):
     """Request a withdrawal"""
     service = AgentService(db)
+    # Use agent.user_id and agent.id
     return service.request_withdrawal(agent.user_id, agent.id, withdrawal_data)

@@ -18,25 +18,21 @@ class AgentService:
         if not agent:
             return {}
         
-        # Get player counts
         total_players = self.db.query(Player).filter(Player.agent_id == agent_id).count()
         active_players = self.db.query(Player).filter(
             Player.agent_id == agent_id,
             Player.status == 'ACTIVE'
         ).count()
         
-        # Get earnings data
         total_earnings = agent.total_earnings or 0.0
         withdrawable_balance = agent.withdrawable_balance or 0.0
         
-        # Get last 7 days earnings for chart
         seven_days_ago = datetime.utcnow() - timedelta(days=7)
         recent_commissions = self.db.query(Commission).filter(
             Commission.agent_id == agent_id,
             Commission.created_at >= seven_days_ago
         ).all()
         
-        # Group by date for chart
         earnings_chart = {}
         for comm in recent_commissions:
             date_key = comm.created_at.strftime('%Y-%m-%d')
@@ -52,7 +48,7 @@ class AgentService:
             "active_players": active_players,
             "total_earnings": total_earnings,
             "withdrawable_balance": withdrawable_balance,
-            "commission_rate": agent.commission_rate * 100,  # Convert to percentage
+            "commission_rate": agent.commission_rate * 100,
             "earnings_chart": chart_data
         }
     
@@ -102,9 +98,10 @@ class AgentService:
     
     def get_withdrawals(self, user_id: int):
         """Get withdrawal history"""
+        # FIXED: Use requested_at instead of created_at
         withdrawals = self.db.query(Withdrawal).filter(
             Withdrawal.user_id == user_id
-        ).order_by(Withdrawal.created_at.desc()).all()
+        ).order_by(Withdrawal.requested_at.desc()).all()
         return withdrawals
     
     def request_withdrawal(self, user_id: int, agent_id: int, withdrawal_data: dict):

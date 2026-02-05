@@ -18,17 +18,14 @@ class AffiliateService:
         if not affiliate:
             return {}
         
-        # Get stats
         total_clicks = affiliate.total_clicks or 0
         total_registrations = affiliate.total_registrations or 0
         total_conversions = affiliate.total_conversions or 0
         total_earnings = affiliate.total_earnings or 0.0
         withdrawable_balance = affiliate.withdrawable_balance or 0.0
         
-        # Calculate conversion rate
         conversion_rate = (total_conversions / total_registrations * 100) if total_registrations > 0 else 0
         
-        # Get charts data
         seven_days_ago = datetime.utcnow() - timedelta(days=7)
         
         clicks_chart = []
@@ -73,7 +70,6 @@ class AffiliateService:
     
     def get_conversions(self, affiliate_id: int, skip: int = 0, limit: int = 100):
         """Get converted players"""
-        # For now, return empty list - would need Player model with referral tracking
         return []
     
     def get_commissions(self, affiliate_id: int, skip: int = 0, limit: int = 100):
@@ -85,9 +81,10 @@ class AffiliateService:
     
     def get_withdrawals(self, user_id: int):
         """Get withdrawal history"""
+        # FIXED: Use requested_at instead of created_at
         withdrawals = self.db.query(Withdrawal).filter(
             Withdrawal.user_id == user_id
-        ).order_by(Withdrawal.created_at.desc()).all()
+        ).order_by(Withdrawal.requested_at.desc()).all()
         return withdrawals
     
     def request_withdrawal(self, user_id: int, affiliate_id: int, withdrawal_data: dict):
