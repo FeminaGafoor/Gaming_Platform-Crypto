@@ -35,6 +35,6 @@ class Withdrawal(Base):
     # Timestamps
     requested_at = Column(DateTime, default=datetime.utcnow)
     processed_at = Column(DateTime, nullable=True)
-    
+
     # Relationships
-    user = relationship("User", back_populates="withdrawals")
+    user = relationship("User", back_populates="withdrawals", foreign_keys=[user_id])
