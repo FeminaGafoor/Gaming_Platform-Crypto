@@ -42,4 +42,4 @@ class User(Base):
     # Think of these as "this user's related records"
     agent = relationship("Agent", back_populates="user", uselist=False)
     affiliate = relationship("Affiliate", back_populates="user", uselist=False)
-    withdrawals = relationship("Withdrawal", back_populates="user")
+    withdrawals = relationship("Withdrawal", back_populates="user", foreign_keys="[Withdrawal.user_id]")
