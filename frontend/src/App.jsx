@@ -45,13 +45,20 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 
 const DashboardLayout = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-6">
-          {children}
-        </main>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden">
+      {/* Animated background blobs */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl animate-pulse-slow pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-3xl animate-pulse-slow pointer-events-none" style={{animationDelay: '1.5s'}}></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/5 dark:bg-pink-500/3 rounded-full blur-3xl animate-pulse-slow pointer-events-none" style={{animationDelay: '3s'}}></div>
+
+      <div className="relative z-10">
+        <Navbar />
+        <div className="flex">
+          <Sidebar />
+          <main className="flex-1 p-6">
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   );
