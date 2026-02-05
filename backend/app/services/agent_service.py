@@ -1,5 +1,5 @@
 
-
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from ..models.agent import Agent
@@ -79,9 +79,12 @@ class AgentService:
             Player.id == player_id,
             Player.agent_id == agent_id
         ).first()
-        
+
         if not player:
-            raise ValueError("Player not found")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Player not found"
+            )
 
         player.status = PlayerStatus.BLOCKED if player.status == PlayerStatus.ACTIVE else PlayerStatus.ACTIVE
         self.db.commit()
@@ -102,15 +105,24 @@ class AgentService:
     def request_withdrawal(self, user_id: int, agent_id: int, withdrawal_data: dict):
         agent = self.db.query(Agent).filter(Agent.id == agent_id).first()
         if not agent:
-            raise ValueError("Agent not found")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Agent not found"
+            )
 
         amount = float(withdrawal_data.get('amount', 0))
         if amount < 50:
-            raise ValueError("Minimum withdrawal amount is $50")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Minimum withdrawal amount is $50"
+            )
 
         current_balance = agent.withdrawable_balance or 0.0
         if amount > current_balance:
-            raise ValueError(f"Insufficient balance. Available: ${current_balance:.2f}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Insufficient balance. Available: ${current_balance:.2f}"
+            )
 
         # ✅ FIXED: Don't deduct balance immediately - wait for admin approval
         withdrawal = Withdrawal(

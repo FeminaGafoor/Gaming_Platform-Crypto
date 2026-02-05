@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from ..models.affiliate import Affiliate
@@ -91,21 +92,30 @@ class AffiliateService:
     def request_withdrawal(self, user_id: int, affiliate_id: int, withdrawal_data: dict):
         """Request a withdrawal"""
         from ..models.withdrawal import Withdrawal
-        
+
         affiliate = self.db.query(Affiliate).filter(Affiliate.id == affiliate_id).first()
-        
+
         if not affiliate:
-            raise ValueError("Affiliate not found")
-        
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Affiliate not found"
+            )
+
         amount = float(withdrawal_data.get('amount', 0))
-        
+
         # ✅ Validate minimum amount
         if amount < 100:
-            raise ValueError("Minimum withdrawal amount is $100")
-        
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Minimum withdrawal amount is $100"
+            )
+
         # ✅ Check balance
         if amount > affiliate.withdrawable_balance:
-            raise ValueError(f"Insufficient balance. Available: ${affiliate.withdrawable_balance:.2f}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Insufficient balance. Available: ${affiliate.withdrawable_balance:.2f}"
+            )
         
         # ✅ Create withdrawal
         withdrawal = Withdrawal(

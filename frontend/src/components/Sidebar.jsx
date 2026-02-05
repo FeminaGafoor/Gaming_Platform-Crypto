@@ -34,7 +34,7 @@ const Sidebar = () => {
   const links = isAgent ? agentLinks : affiliateLinks;
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 min-h-screen p-4">
+    <aside className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen p-4">
       <nav className="space-y-2">
         {links.map((link) => (
           <NavLink
@@ -43,8 +43,8 @@ const Sidebar = () => {
             className={({ isActive }) =>
               `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                 isActive
-                  ? 'bg-primary-50 text-primary-600'
-                  : 'text-gray-700 hover:bg-gray-50'
+                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`
             }
           >

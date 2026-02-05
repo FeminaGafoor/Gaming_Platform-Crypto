@@ -40,13 +40,13 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-blue-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary-600 mb-2">
+          <h1 className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
             Gaming Platform
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             {isLogin ? 'Welcome back!' : 'Create your account'}
           </p>
         </div>
@@ -54,7 +54,7 @@ const Login = () => {
         <div className="card">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
                 {error}
               </div>
             )}
@@ -112,7 +112,7 @@ const Login = () => {
                 setIsLogin(!isLogin);
                 setError('');
               }}
-              className="text-sm text-primary-600 hover:text-primary-700"
+              className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
             >
               {isLogin
                 ? "Don't have an account? Register"
@@ -121,9 +121,9 @@ const Login = () => {
           </div>
 
           {/* Quick test accounts */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-500 text-center mb-2">Quick test accounts:</p>
-            <div className="text-xs text-gray-600 space-y-1">
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-2">Quick test accounts:</p>
+            <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
               <p>Agent: agent@test.com / password123</p>
               <p>Affiliate: affiliate@test.com / password123</p>
             </div>
