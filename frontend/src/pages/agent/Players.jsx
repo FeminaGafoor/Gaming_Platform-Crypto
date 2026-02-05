@@ -56,14 +56,14 @@ const AgentPlayers = () => {
     { key: 'id', label: 'ID' },
     { key: 'username', label: 'Username' },
     { key: 'email', label: 'Email' },
-    { 
-      key: 'status', 
-      label: 'Status', 
+    {
+      key: 'status',
+      label: 'Status',
       render: (row) => (
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+        <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-lg ${
           row.status === 'ACTIVE' || row.status === 'active'
-            ? 'bg-green-100 text-green-800' 
-            : 'bg-red-100 text-red-800'
+            ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-green-500/30'
+            : 'bg-gradient-to-r from-red-400 to-pink-500 text-white shadow-red-500/30'
         }`}>
           {row.status}
         </span>
@@ -90,10 +90,10 @@ const AgentPlayers = () => {
       render: (row) => (
         <button
           onClick={() => togglePlayerStatus(row.id)}
-          className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-105 shadow-lg ${
             row.status === 'ACTIVE' || row.status === 'active'
-              ? 'bg-red-100 text-red-700 hover:bg-red-200'
-              : 'bg-green-100 text-green-700 hover:bg-green-200'
+              ? 'bg-gradient-to-r from-red-400 to-pink-500 text-white hover:from-red-500 hover:to-pink-600 shadow-red-500/30'
+              : 'bg-gradient-to-r from-green-400 to-emerald-500 text-white hover:from-green-500 hover:to-emerald-600 shadow-green-500/30'
           }`}
         >
           {row.status === 'ACTIVE' || row.status === 'active' ? 'Block' : 'Unblock'}
@@ -103,37 +103,39 @@ const AgentPlayers = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 p-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Players</h1>
-          <p className="text-gray-600 mt-1">Manage your players</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-2">
+            Players
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Manage your players</p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
           className="btn-primary flex items-center space-x-2"
         >
-          <UserPlus className="w-4 h-4" />
+          <UserPlus className="w-5 h-5" />
           <span>{showForm ? 'Cancel' : 'Add Player'}</span>
         </button>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg flex items-center space-x-2">
-          <AlertCircle className="w-5 h-5" />
-          <span>{error}</span>
+        <div className="bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-6 py-4 rounded-2xl flex items-center space-x-3 shadow-lg animate-pulse">
+          <AlertCircle className="w-6 h-6" />
+          <span className="font-medium">{error}</span>
         </div>
       )}
 
       {success && (
-        <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg">
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border-2 border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 px-6 py-4 rounded-2xl shadow-lg font-medium">
           {success}
         </div>
       )}
 
       {showForm && (
-        <div className="card">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Add New Player</h2>
+        <div className="card shadow-2xl">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-6">Add New Player</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="label">Username</label>
@@ -157,6 +159,23 @@ const AgentPlayers = () => {
                 placeholder="player@example.com"
                 required
               />
+            </div>
+
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-800/30 rounded-2xl p-5 mb-4 shadow-lg">
+              <h3 className="text-sm font-bold text-blue-900 dark:text-blue-400 mb-3 flex items-center space-x-2">
+                <AlertCircle className="w-5 h-5" />
+                <span>Important Notes:</span>
+              </h3>
+              <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-2">
+                <li className="flex items-start space-x-2">
+                  <span className="text-blue-500 mt-0.5">•</span>
+                  <span>A temporary password will be sent to the player's email</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-blue-500 mt-0.5">•</span>
+                  <span>Player can change password after first login</span>
+                </li>
+              </ul>
             </div>
 
             <div className="flex space-x-3">
