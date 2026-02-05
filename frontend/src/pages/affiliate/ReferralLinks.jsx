@@ -54,7 +54,7 @@ const AffiliateReferralLinks = () => {
       </div>
 
       {/* Main Referral Link */}
-      <div className="card shadow-2xl bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-blue-900/20 border-2 border-blue-200 dark:border-blue-800/30">
+      <div className="card shadow-2xl bg-gradient-to-br from-blue-50 via-purple-50 to-blue-100 dark:from-blue-900/60 dark:via-purple-900/60 dark:to-blue-900/60 border-2 border-blue-200 dark:border-blue-700/50">
         <div className="space-y-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Your Referral Code</h2>
@@ -187,7 +187,7 @@ const AffiliateReferralLinks = () => {
               </div>
 
               {/* Referral Code */}
-              <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-5 mb-6 border-2 border-blue-200 dark:border-blue-800/30">
+              <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/60 dark:to-purple-900/60 rounded-2xl p-5 mb-6 border-2 border-blue-200 dark:border-blue-700/50">
                 <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">Referral Code</p>
                 <code className="text-2xl font-mono font-bold text-blue-600 dark:text-blue-400">
                   {linkData?.referral_code}
@@ -212,7 +212,7 @@ const AffiliateReferralLinks = () => {
               </div>
 
               {/* Tips */}
-              <div className="text-left bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl p-5 border-2 border-blue-200 dark:border-blue-800/30">
+              <div className="text-left bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/60 dark:to-cyan-900/60 rounded-2xl p-5 border-2 border-blue-200 dark:border-blue-700/50">
                 <p className="text-sm font-bold text-blue-900 dark:text-blue-400 mb-3 flex items-center">
                   <span className="mr-2">💡</span> Usage Tips:
                 </p>
@@ -246,7 +246,7 @@ const AffiliateReferralLinks = () => {
           How to Use Your Referral Links
         </h2>
         <div className="space-y-6">
-          <div className="flex items-start space-x-4 p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-2 border-blue-200 dark:border-blue-800/30 hover:scale-105 transition-all duration-300">
+          <div className="flex items-start space-x-4 p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/60 dark:to-cyan-900/60 border-2 border-blue-200 dark:border-blue-700/50 hover:scale-105 transition-all duration-300">
             <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 text-white rounded-xl flex items-center justify-center font-bold shadow-lg">
               1
             </div>
@@ -258,7 +258,7 @@ const AffiliateReferralLinks = () => {
             </div>
           </div>
 
-          <div className="flex items-start space-x-4 p-4 rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-2 border-green-200 dark:border-green-800/30 hover:scale-105 transition-all duration-300">
+          <div className="flex items-start space-x-4 p-4 rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/60 dark:to-emerald-900/60 border-2 border-green-200 dark:border-green-700/50 hover:scale-105 transition-all duration-300">
             <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 text-white rounded-xl flex items-center justify-center font-bold shadow-lg">
               2
             </div>
@@ -270,7 +270,7 @@ const AffiliateReferralLinks = () => {
             </div>
           </div>
 
-          <div className="flex items-start space-x-4 p-4 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-2 border-purple-200 dark:border-purple-800/30 hover:scale-105 transition-all duration-300">
+          <div className="flex items-start space-x-4 p-4 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/60 dark:to-pink-900/60 border-2 border-purple-200 dark:border-purple-700/50 hover:scale-105 transition-all duration-300">
             <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 text-white rounded-xl flex items-center justify-center font-bold shadow-lg">
               3
             </div>

@@ -170,14 +170,14 @@ const AdminWithdrawals = () => {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">ID</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">User</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Role</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Amount</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Payment</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Requested</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Action</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">ID</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">User</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Role</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Amount</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Payment</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Requested</th>
+                <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -193,13 +193,13 @@ const AdminWithdrawals = () => {
               ) : (
                 filteredWithdrawals.map((withdrawal) => (
                   <tr key={withdrawal.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-bold text-gray-900 dark:text-white">
                       #{withdrawal.id}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-200">
                       {withdrawal.user_email}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <span className={`px-3 py-1 text-xs font-bold rounded-full shadow-lg ${
                         withdrawal.user_role === 'agent'
                           ? 'bg-gradient-to-r from-blue-400 to-cyan-500 text-white shadow-blue-500/30' :
@@ -210,10 +210,10 @@ const AdminWithdrawals = () => {
                         {withdrawal.user_role?.toUpperCase() || 'N/A'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-bold text-gray-900 dark:text-white">
                       ${withdrawal.amount.toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900 dark:text-gray-200">
                         <div className="font-medium">{withdrawal.payment_method || 'N/A'}</div>
                         {withdrawal.payment_details && (
@@ -223,15 +223,15 @@ const AdminWithdrawals = () => {
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <span className={`px-3 py-1 text-xs font-bold rounded-full shadow-lg ${getStatusBadge(withdrawal.status)}`}>
                         {withdrawal.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                       {withdrawal.requested_at ? new Date(withdrawal.requested_at).toLocaleDateString() : 'N/A'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium">
                       {withdrawal.status === 'PENDING' ? (
                         <div className="flex space-x-2">
                           <button
@@ -290,7 +290,7 @@ const AdminWithdrawals = () => {
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl p-4 mb-6 border-2 border-blue-200 dark:border-blue-800/30">
+            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/60 dark:to-cyan-900/60 rounded-2xl p-4 mb-6 border-2 border-blue-200 dark:border-blue-700/50">
               <div className="text-sm space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-400">User:</span>
@@ -359,7 +359,7 @@ const AdminWithdrawals = () => {
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl p-4 mb-6 border-2 border-blue-200 dark:border-blue-800/30">
+            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/60 dark:to-cyan-900/60 rounded-2xl p-4 mb-6 border-2 border-blue-200 dark:border-blue-700/50">
               <div className="text-sm space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-400">User:</span>

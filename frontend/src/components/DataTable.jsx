@@ -21,14 +21,14 @@ const DataTable = ({ columns, data, loading }) => {
 
   return (
     <div className="card overflow-hidden p-0">
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 scrollbar-track-gray-200 dark:scrollbar-track-gray-800">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-4 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                 >
                   {column.label}
                 </th>
@@ -39,7 +39,7 @@ const DataTable = ({ columns, data, loading }) => {
             {data.map((row, index) => (
               <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                 {columns.map((column) => (
-                  <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                  <td key={column.key} className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 dark:text-gray-100">
                     {column.render ? column.render(row) : row[column.key]}
                   </td>
                 ))}
