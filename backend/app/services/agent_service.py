@@ -103,15 +103,16 @@ class AgentService:
         agent = self.db.query(Agent).filter(Agent.id == agent_id).first()
         if not agent:
             raise ValueError("Agent not found")
-        
+
         amount = float(withdrawal_data.get('amount', 0))
         if amount < 50:
             raise ValueError("Minimum withdrawal amount is $50")
-        
+
         current_balance = agent.withdrawable_balance or 0.0
         if amount > current_balance:
             raise ValueError(f"Insufficient balance. Available: ${current_balance:.2f}")
-        
+
+        # ✅ FIXED: Don't deduct balance immediately - wait for admin approval
         withdrawal = Withdrawal(
             user_id=user_id,
             agent_id=agent_id,
@@ -122,11 +123,9 @@ class AgentService:
             status='PENDING',
             requested_at=datetime.utcnow()
         )
-        
-        agent.withdrawable_balance = current_balance - amount
-        
+
         self.db.add(withdrawal)
         self.db.commit()
         self.db.refresh(withdrawal)
-        
+
         return withdrawal
