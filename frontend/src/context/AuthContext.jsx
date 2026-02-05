@@ -12,12 +12,18 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
-    
+
     if (storedToken && storedUser) {
+      const userData = JSON.parse(storedUser);
+      // Normalize role to lowercase for frontend consistency
+      const normalizedUser = {
+        ...userData,
+        role: userData.role?.toLowerCase()
+      };
       setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      setUser(normalizedUser);
     }
-    
+
     setLoading(false);
   }, []);
 
@@ -25,16 +31,22 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authAPI.login({ email, password });
       const { access_token, user: userData } = response.data;
-      
+
+      // Normalize role to lowercase for frontend consistency
+      const normalizedUser = {
+        ...userData,
+        role: userData.role?.toLowerCase()
+      };
+
       // Save to state
       setToken(access_token);
-      setUser(userData);
-      
+      setUser(normalizedUser);
+
       // Save to localStorage
       localStorage.setItem('token', access_token);
-      localStorage.setItem('user', JSON.stringify(userData));
-      
-      return { success: true, user: userData };
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
+
+      return { success: true, user: normalizedUser };
     } catch (error) {
       console.error('Login error:', error);
       return {
@@ -48,16 +60,22 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authAPI.register({ email, password, role });
       const { access_token, user: userData } = response.data;
-      
+
+      // Normalize role to lowercase for frontend consistency
+      const normalizedUser = {
+        ...userData,
+        role: userData.role?.toLowerCase()
+      };
+
       // Save to state
       setToken(access_token);
-      setUser(userData);
-      
+      setUser(normalizedUser);
+
       // Save to localStorage
       localStorage.setItem('token', access_token);
-      localStorage.setItem('user', JSON.stringify(userData));
-      
-      return { success: true, user: userData };
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
+
+      return { success: true, user: normalizedUser };
     } catch (error) {
       console.error('Register error:', error);
       return {
