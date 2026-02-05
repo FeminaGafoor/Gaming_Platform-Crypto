@@ -128,39 +128,48 @@ const AffiliateCommissions = () => {
   }));
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 p-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Commission History</h1>
-          <p className="text-gray-600 mt-1">Track all your earnings</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-2">
+            Commission History
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Track all your earnings</p>
         </div>
         <button
-        type="button"
-        onClick={() => exportToCSV(commissions, `commissions_${new Date().toISOString().split('T')[0]}.csv`)}
-        className="btn-secondary flex items-center space-x-2"
-      >
-          
-        
+          type="button"
+          onClick={() => exportToCSV(commissions, `commissions_${new Date().toISOString().split('T')[0]}.csv`)}
+          className="btn-secondary flex items-center space-x-2"
+        >
           <Download className="w-4 h-4" />
           <span>Export CSV</span>
         </button>
       </div>
 
       {/* Trend Graph */}
-      <div className="card">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Commission Trend</h2>
+      <div className="card shadow-2xl">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-6">
+          Commission Trend
+        </h2>
         {chartData.length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="amount" stroke="#3b82f6" strokeWidth={2} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
+              <XAxis dataKey="date" stroke="#9CA3AF" />
+              <YAxis stroke="#9CA3AF" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1F2937',
+                  border: 'none',
+                  borderRadius: '12px',
+                  color: '#fff'
+                }}
+              />
+              <Line type="monotone" dataKey="amount" stroke="#3B82F6" strokeWidth={3} dot={{ fill: '#3B82F6', r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
         ) : (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
             No data yet
           </div>
         )}

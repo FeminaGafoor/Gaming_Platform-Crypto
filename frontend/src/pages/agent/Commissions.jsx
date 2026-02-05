@@ -62,11 +62,11 @@ const AgentCommissions = () => {
 
   const columns = [
     { key: 'id', label: 'ID' },
-    { 
-      key: 'amount', 
-      label: 'Amount', 
+    {
+      key: 'amount',
+      label: 'Amount',
       render: (row) => (
-        <span className="font-semibold text-green-600">
+        <span className="font-semibold text-green-600 dark:text-green-400">
           ${row.amount.toFixed(2)}
         </span>
       )
@@ -88,11 +88,13 @@ const AgentCommissions = () => {
   }));
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 p-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Commission History</h1>
-          <p className="text-gray-600 mt-1">Track all your earnings</p>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-2">
+            Commission History
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Track all your earnings</p>
         </div>
         <button
           type="button"
@@ -105,17 +107,17 @@ const AgentCommissions = () => {
       </div>
 
       {/* Summary Card */}
-      <div className="card bg-gradient-to-r from-green-50 to-blue-50">
+      <div className="card shadow-2xl bg-gradient-to-br from-green-50 via-emerald-50 to-blue-50 dark:from-green-900/20 dark:via-emerald-900/20 dark:to-blue-900/20 border-2 border-green-200 dark:border-green-800/30">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-600 mb-1">Total Earnings</p>
-            <p className="text-4xl font-bold text-green-600">
+            <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">Total Earnings</p>
+            <p className="text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
               ${totalEarnings.toFixed(2)}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-600 mb-1">Total Commissions</p>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">Total Commissions</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">
               {commissions.length}
             </p>
           </div>
@@ -123,20 +125,29 @@ const AgentCommissions = () => {
       </div>
 
       {/* Trend Graph */}
-      <div className="card">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Commission Trend</h2>
+      <div className="card shadow-2xl">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent mb-6">
+          Commission Trend
+        </h2>
         {chartData.length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="amount" stroke="#10b981" strokeWidth={2} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
+              <XAxis dataKey="date" stroke="#9CA3AF" />
+              <YAxis stroke="#9CA3AF" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1F2937',
+                  border: 'none',
+                  borderRadius: '12px',
+                  color: '#fff'
+                }}
+              />
+              <Line type="monotone" dataKey="amount" stroke="#10B981" strokeWidth={3} dot={{ fill: '#10B981', r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
         ) : (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
             No data yet
           </div>
         )}
