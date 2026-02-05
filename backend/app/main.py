@@ -32,12 +32,17 @@ app = FastAPI(
 )
 
 # ✅ CORS Configuration
+# Split and strip whitespace from origins
+cors_origins = [origin.strip() for origin in settings.CORS_ORIGINS.split(",")]
+print(f"🔐 CORS allowed origins: {cors_origins}")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS.split(","),
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Include routers
