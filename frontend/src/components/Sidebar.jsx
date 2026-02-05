@@ -48,8 +48,12 @@ const Sidebar = () => {
               }`
             }
           >
-            <link.icon className={`w-5 h-5 ${!isActive && 'group-hover:scale-110 transition-transform'}`} />
-            <span className="font-semibold">{link.label}</span>
+            {({ isActive }) => (
+              <>
+                <link.icon className={`w-5 h-5 transition-transform ${!isActive && 'group-hover:scale-110'}`} />
+                <span className="font-semibold">{link.label}</span>
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
