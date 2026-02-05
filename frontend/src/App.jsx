@@ -36,7 +36,10 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   }
 
   if (requiredRole && user?.role !== requiredRole) {
-    const redirectPath = user?.role === 'agent' ? '/agent/dashboard' : '/affiliate/dashboard';
+    const redirectPath =
+      user?.role === 'admin' ? '/admin/withdrawals' :
+      user?.role === 'agent' ? '/agent/dashboard' :
+      '/affiliate/dashboard';
     return <Navigate to={redirectPath} replace />;
   }
 

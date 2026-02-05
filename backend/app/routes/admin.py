@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
+from pydantic import BaseModel
+from typing import Optional
 from ..database import get_db
 from ..models.withdrawal import Withdrawal
 from ..models.agent import Agent
@@ -9,6 +11,13 @@ from ..models.user import User
 from ..utils.dependencies import get_current_admin
 
 router = APIRouter()
+
+class ApprovalRequest(BaseModel):
+    admin_notes: Optional[str] = None
+
+class RejectionRequest(BaseModel):
+    rejection_reason: str
+    admin_notes: Optional[str] = None
 
 @router.get("/withdrawals")
 def list_withdrawals(
@@ -42,6 +51,7 @@ def list_withdrawals(
 @router.put("/withdrawals/{withdrawal_id}/approve")
 def approve_withdrawal(
     withdrawal_id: int,
+    request: ApprovalRequest,
     db: Session = Depends(get_db),
     current_admin: User = Depends(get_current_admin)
 ):
@@ -75,14 +85,23 @@ def approve_withdrawal(
         affiliate.withdrawable_balance -= withdrawal.amount
 
     withdrawal.status = "APPROVED"
+    withdrawal.approved_by = current_admin.id
+    withdrawal.approved_at = datetime.utcnow()
     withdrawal.processed_at = datetime.utcnow()
+    withdrawal.admin_notes = request.admin_notes
     db.commit()
     db.refresh(withdrawal)
-    return withdrawal
+    return {"success": True, "withdrawal": {
+        "id": withdrawal.id,
+        "status": withdrawal.status,
+        "amount": withdrawal.amount,
+        "approved_at": withdrawal.approved_at.isoformat()
+    }}
 
 @router.put("/withdrawals/{withdrawal_id}/reject")
 def reject_withdrawal(
     withdrawal_id: int,
+    request: RejectionRequest,
     db: Session = Depends(get_db),
     current_admin: User = Depends(get_current_admin)
 ):
@@ -95,7 +114,16 @@ def reject_withdrawal(
         raise HTTPException(status_code=400, detail="Withdrawal already processed")
 
     withdrawal.status = "REJECTED"
+    withdrawal.approved_by = current_admin.id
+    withdrawal.approved_at = datetime.utcnow()
     withdrawal.processed_at = datetime.utcnow()
+    withdrawal.rejection_reason = request.rejection_reason
+    withdrawal.admin_notes = request.admin_notes
     db.commit()
     db.refresh(withdrawal)
-    return withdrawal
+    return {"success": True, "withdrawal": {
+        "id": withdrawal.id,
+        "status": withdrawal.status,
+        "rejection_reason": withdrawal.rejection_reason,
+        "approved_at": withdrawal.approved_at.isoformat()
+    }}

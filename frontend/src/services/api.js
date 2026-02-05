@@ -45,8 +45,8 @@ export const authAPI = {
 //Admin APIs
 export const adminAPI = {
   getWithdrawals: () => api.get('/api/admin/withdrawals'),
-  approveWithdrawal: (id) => api.put(`/api/admin/withdrawals/${id}/approve`),
-  rejectWithdrawal: (id) => api.put(`/api/admin/withdrawals/${id}/reject`),
+  approveWithdrawal: (id, data) => api.put(`/api/admin/withdrawals/${id}/approve`, data),
+  rejectWithdrawal: (id, data) => api.put(`/api/admin/withdrawals/${id}/reject`, data),
 };
 
 

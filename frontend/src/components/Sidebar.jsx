@@ -9,10 +9,11 @@ import {
   MousePointerClick,
   TrendingUp,
   Package,
+  Shield,
 } from 'lucide-react';
 
 const Sidebar = () => {
-  const { isAgent, isAffiliate } = useAuth();
+  const { isAgent, isAffiliate, isAdmin } = useAuth();
 
   const agentLinks = [
     { to: '/agent/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -31,7 +32,11 @@ const Sidebar = () => {
     { to: '/affiliate/marketing', icon: Package, label: 'Marketing Assets' },
   ];
 
-  const links = isAgent ? agentLinks : affiliateLinks;
+  const adminLinks = [
+    { to: '/admin/withdrawals', icon: Shield, label: 'Withdrawals' },
+  ];
+
+  const links = isAdmin ? adminLinks : isAgent ? agentLinks : affiliateLinks;
 
   return (
     <aside className="w-64 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl border-r border-gray-200 dark:border-gray-800 min-h-screen p-4">
