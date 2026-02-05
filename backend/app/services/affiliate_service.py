@@ -4,6 +4,7 @@ from ..models.affiliate import Affiliate
 from ..models.click import Click
 from ..models.commission import Commission
 from ..models.withdrawal import Withdrawal
+from ..config import settings
 
 
 class AffiliateService:
@@ -31,7 +32,7 @@ class AffiliateService:
         clicks_chart = []
         earnings_chart = []
         
-        referral_url = f"https://gaming-platform.com/signup?ref={affiliate.referral_code}"
+        referral_url = f"{settings.BASE_URL}/signup?ref={affiliate.referral_code}"
         
         return {
             "total_clicks": total_clicks,
@@ -54,9 +55,9 @@ class AffiliateService:
         
         return {
             "referral_code": affiliate.referral_code,
-            "referral_url": f"https://gaming-platform.com/signup?ref={affiliate.referral_code}",
+            "referral_url": f"{settings.BASE_URL}/signup?ref={affiliate.referral_code}",
             "short_url": f"https://gp.co/{affiliate.referral_code}",
-            "qr_code_url": f"https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://gaming-platform.com/signup?ref={affiliate.referral_code}",
+            "qr_code_url": f"https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={settings.BASE_URL}/signup?ref={affiliate.referral_code}",
             "cpa_amount": affiliate.cpa_amount,
             "banner_images": []
         }

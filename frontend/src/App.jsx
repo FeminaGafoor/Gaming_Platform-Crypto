@@ -78,8 +78,10 @@ function App() {
           <Route path="/affiliate/commissions" element={<ProtectedRoute requiredRole="affiliate"><DashboardLayout><AffiliateCommissions /></DashboardLayout></ProtectedRoute>} />
           <Route path="/affiliate/withdrawals" element={<ProtectedRoute requiredRole="affiliate"><DashboardLayout><AffiliateWithdrawals /></DashboardLayout></ProtectedRoute>} />
           <Route path="/affiliate/marketing" element={<ProtectedRoute requiredRole="affiliate"><DashboardLayout><AffiliateMarketing /></DashboardLayout></ProtectedRoute>} />
-          <Route path="/admin/withdrawals" element={<AdminWithdrawals />} />
-          
+
+          {/* Admin Routes */}
+          <Route path="/admin/withdrawals" element={<ProtectedRoute requiredRole="admin"><DashboardLayout><AdminWithdrawals /></DashboardLayout></ProtectedRoute>} />
+
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>

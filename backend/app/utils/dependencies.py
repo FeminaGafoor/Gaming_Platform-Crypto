@@ -159,5 +159,34 @@ def get_current_affiliate(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Affiliate profile not found"
         )
-    
+
     return affiliate
+
+
+def get_current_admin(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    """
+    Verify current user is an admin.
+
+    Story: Some routes are only for admins (like managing withdrawals)
+    This dependency checks:
+    1. User is authenticated (via get_current_user)
+    2. User's role is ADMIN
+
+    Args:
+        current_user: Authenticated user
+
+    Returns:
+        User object if they are an admin
+
+    Raises:
+        HTTPException: If user is not an admin
+    """
+    if current_user.role != UserRole.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+
+    return current_user

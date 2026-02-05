@@ -8,7 +8,7 @@ from .config import settings
 engine = create_engine(
     settings.DATABASE_URL,
     pool_pre_ping=True,  # Check if connection is alive before using
-    echo=True  # Print SQL queries (useful for debugging, turn off in production)
+    echo=False  # Disabled for production - enable locally if debugging
 )
 
 # Create SessionLocal class

@@ -1,11 +1,13 @@
 
 
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
-from .database import engine, Base
+from .database import engine, Base, get_db
 from .routes import auth, agent, affiliate, admin
 from .config import get_settings
 
@@ -32,10 +34,7 @@ app = FastAPI(
 # ✅ CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://your-vercel-domain.vercel.app",
-    ],
+    allow_origins=settings.CORS_ORIGINS.split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -56,5 +55,14 @@ async def root():
     }
 
 @app.get("/health")
-async def health_check():
-    return {"status": "healthy"}
+async def health_check(db: Session = Depends(get_db)):
+    """
+    Health check endpoint that verifies database connectivity.
+    Railway uses this to determine if the application is healthy.
+    """
+    try:
+        # Test database connection
+        db.execute(text("SELECT 1"))
+        return {"status": "healthy", "database": "connected"}
+    except Exception as e:
+        return {"status": "unhealthy", "database": "disconnected", "error": str(e)}

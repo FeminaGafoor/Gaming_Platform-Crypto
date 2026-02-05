@@ -3,7 +3,7 @@
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from ..models.agent import Agent
-from ..models.player import Player
+from ..models.player import Player, PlayerStatus
 from ..models.commission import Commission
 from ..models.withdrawal import Withdrawal
 
@@ -22,7 +22,7 @@ class AgentService:
         total_players = self.db.query(Player).filter(Player.agent_id == agent_id).count()
         active_players = self.db.query(Player).filter(
             Player.agent_id == agent_id,
-            Player.status == 'ACTIVE'
+            Player.status == PlayerStatus.ACTIVE
         ).count()
         
         total_earnings = agent.total_earnings or 0.0
@@ -64,7 +64,7 @@ class AgentService:
             agent_id=agent_id,
             username=player_data.get('username'),
             email=player_data.get('email'),
-            status='ACTIVE',
+            status=PlayerStatus.ACTIVE,
             total_deposits=0.0,
             total_losses=0.0,
             created_at=datetime.utcnow()
@@ -82,8 +82,8 @@ class AgentService:
         
         if not player:
             raise ValueError("Player not found")
-        
-        player.status = 'BLOCKED' if player.status == 'ACTIVE' else 'ACTIVE'
+
+        player.status = PlayerStatus.BLOCKED if player.status == PlayerStatus.ACTIVE else PlayerStatus.ACTIVE
         self.db.commit()
         return player
     

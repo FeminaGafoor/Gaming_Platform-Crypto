@@ -14,8 +14,10 @@ class Settings(BaseSettings):
     
     # CORS
     FRONTEND_URL: str = "http://localhost:5173"  # ✅ Changed to 5173
+    CORS_ORIGINS: str = "http://localhost:5173"  # Comma-separated list of allowed origins
     
     # App Settings
+    BASE_URL: str = "http://localhost:5173"  # Base URL for referral links
     PROJECT_NAME: str = "Gaming Platform API"
     VERSION: str = "1.0.0"
     
