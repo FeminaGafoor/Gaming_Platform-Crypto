@@ -12,9 +12,9 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
-    # CORS
-    FRONTEND_URL: str = "http://localhost:5173"  # ✅ Changed to 5173
-    CORS_ORIGINS: str = "http://localhost:5173"  # Comma-separated list of allowed origins
+    # CORS - Support multiple origins for development and production
+    FRONTEND_URL: str = "http://localhost:5173"
+    CORS_ORIGINS: str = "http://localhost:5173,https://gaming-platform-crypto.vercel.app"  # Comma-separated list
     
     # App Settings
     BASE_URL: str = "http://localhost:5173"  # Base URL for referral links
