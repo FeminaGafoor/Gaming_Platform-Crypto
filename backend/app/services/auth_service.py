@@ -68,9 +68,11 @@ class AuthService:
         
         self.db.commit()
         
+        role_str = user.role.value if hasattr(user.role, 'value') else user.role
+    
         # Create token
         access_token = create_access_token(
-            data={"sub": user.email, "role": user.role.value}
+            data={"sub": user.email, "role": role_str}
         )
         
         return {
@@ -78,12 +80,11 @@ class AuthService:
             "token_type": "bearer",
             "user": {
                 "email": user.email,
-                "role": user.role.value
+                "role": role_str
             }
         }
     
     def login(self, email: str, password: str) -> dict:
-        """Login user"""
         user = self.db.query(User).filter(User.email == email).first()
         if not user:
             raise ValueError("Invalid email or password")
@@ -91,8 +92,11 @@ class AuthService:
         if not verify_password(password, user.password_hash):
             raise ValueError("Invalid email or password")
         
+        # ✅ FIX: Handle both Enum and string roles
+        role_str = user.role.value if hasattr(user.role, 'value') else user.role
+        
         access_token = create_access_token(
-            data={"sub": user.email, "role": user.role.value}
+            data={"sub": user.email, "role": role_str}
         )
         
         return {
@@ -100,7 +104,7 @@ class AuthService:
             "token_type": "bearer",
             "user": {
                 "email": user.email,
-                "role": user.role.value
+                "role": role_str
             }
         }
     
